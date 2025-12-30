@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Pokemon GO 個体値 16進数計算</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div class="page">
+      <header class="hero">
+        <div class="badge">Pokemon GO IV</div>
+        <h1>個体値 16進数計算</h1>
+        <p class="lead">
+          こうげき・ぼうぎょ・HPを16進数 (0&#8211;F) で入力すると、合計から
+          個体値%を計算します。
+        </p>
+      </header>
+
+      <main class="content">
+        <section class="panel inputs" aria-labelledby="inputs-title">
+          <div class="panel-title" id="inputs-title">16進数入力</div>
+          <div class="field-grid">
+            <label class="field" for="atk">
+              <span>こうげき</span>
+              <input
+                id="atk"
+                name="attack"
+                type="text"
+                inputmode="text"
+                autocomplete="off"
+                spellcheck="false"
+                maxlength="3"
+                placeholder="F"
+                aria-label="こうげきの16進数"
+              />
+            </label>
+            <label class="field" for="def">
+              <span>ぼうぎょ</span>
+              <input
+                id="def"
+                name="defense"
+                type="text"
+                inputmode="text"
+                autocomplete="off"
+                spellcheck="false"
+                maxlength="3"
+                placeholder="F"
+                aria-label="ぼうぎょの16進数"
+              />
+            </label>
+            <label class="field" for="hp">
+              <span>HP</span>
+              <input
+                id="hp"
+                name="hp"
+                type="text"
+                inputmode="text"
+                autocomplete="off"
+                spellcheck="false"
+                maxlength="3"
+                placeholder="F"
+                aria-label="HPの16進数"
+              />
+            </label>
+          </div>
+          <p class="hint">ヒント: どこかの欄に「FFF」を貼り付けると3つに分割します。</p>
+        </section>
+
+        <section class="panel results" aria-live="polite">
+          <div class="panel-title">結果</div>
+          <div class="metrics">
+            <div class="metric">
+              <span class="label">合計</span>
+              <span class="value" id="total">&#8212;</span>
+            </div>
+            <div class="metric">
+              <span class="label">個体値%</span>
+              <span class="value" id="percent">&#8212;</span>
+            </div>
+          </div>
+          <div class="formula" id="formula">15 + 15 + 15 = 45 / 45</div>
+          <div class="status" id="status">3つの値を入力してください。</div>
+        </section>
+      </main>
+    </div>
+
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>
