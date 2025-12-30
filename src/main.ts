@@ -1,3 +1,4 @@
+// 入力・スライダー・出力のDOM参照を取得。
 const atkInput = document.querySelector<HTMLInputElement>("#atk");
 const defInput = document.querySelector<HTMLInputElement>("#def");
 const hpInput = document.querySelector<HTMLInputElement>("#hp");
@@ -10,6 +11,7 @@ const percentDetailEl = document.querySelector<HTMLSpanElement>("#percent-detail
 const formulaEl = document.querySelector<HTMLDivElement>("#formula");
 const statusEl = document.querySelector<HTMLDivElement>("#status");
 
+// 必要な要素が欠けていたら即座にエラー。
 if (
   !atkInput ||
   !defInput ||
@@ -31,9 +33,11 @@ const sliders = [atkSlider, defSlider, hpSlider];
 const maxStat = 15;
 const maxTotal = maxStat * 3;
 
+// 検証用の正規表現。
 const hexCharRe = /^[0-9A-F]$/;
 const hexTripleRe = /^[0-9A-F]{3}$/;
 
+// 正規化・フォーマット用のヘルパー。
 const sanitizeHex = (value: string) => value.replace(/[^0-9A-F]/gi, "").toUpperCase();
 const toHex = (value: number) => value.toString(16).toUpperCase();
 const setSliderProgress = (slider: HTMLInputElement, value: number) => {
@@ -42,6 +46,7 @@ const setSliderProgress = (slider: HTMLInputElement, value: number) => {
   slider.style.setProperty("--slider-progress", `${percent}%`);
 };
 
+// 3桁の16進数貼り付けで3つの値へ一括反映。
 const applyCombined = (value: string) => {
   if (!hexTripleRe.test(value)) {
     return false;
@@ -54,6 +59,7 @@ const applyCombined = (value: string) => {
   return true;
 };
 
+// 1桁の16進数を数値化し、不正入力も判定。
 const parseHex = (value: string) => {
   if (value.length === 0) {
     return { value: null, invalid: false };
@@ -68,6 +74,7 @@ const parseHex = (value: string) => {
   return { value: parsed, invalid: false };
 };
 
+// 出力用のパーセント表示を整形。
 const formatPercent = (value: number) => {
   const rounded = Math.round(value);
   return `${rounded.toFixed(0)}%`;
@@ -78,6 +85,7 @@ const formatPercentDetail = (value: number) => {
   return `(${rounded.toFixed(1)})`;
 };
 
+// 入力値・バリデーション状態・スライダーを同期。
 const normalizeInput = (input: HTMLInputElement, slider: HTMLInputElement) => {
   const sanitized = sanitizeHex(input.value);
   const single = sanitized.slice(-1);
@@ -97,6 +105,7 @@ const normalizeInput = (input: HTMLInputElement, slider: HTMLInputElement) => {
   };
 };
 
+// 未入力/不正入力時の出力表示をリセット。
 const resetOutput = (displayParts: string[], message: string, statusClass: string) => {
   totalEl.textContent = "--";
   percentEl.textContent = "--";
@@ -106,6 +115,7 @@ const resetOutput = (displayParts: string[], message: string, statusClass: strin
   statusEl.className = statusClass;
 };
 
+// 合計を再計算してUIを更新。
 const updateOutput = () => {
   const parsed = inputs.map((input, index) => normalizeInput(input, sliders[index]));
   const hasInvalid = parsed.some((result) => result.invalid);
@@ -133,6 +143,7 @@ const updateOutput = () => {
   statusEl.className = "status good";
 };
 
+// テキスト入力の変更を処理。
 const handleInput = (event: Event) => {
   const target = event.target as HTMLInputElement;
   const sanitized = sanitizeHex(target.value);
@@ -149,12 +160,14 @@ const handleInput = (event: Event) => {
   updateOutput();
 };
 
+// スライダーと入力欄の対応を保持。
 const sliderToInput = new Map<HTMLInputElement, HTMLInputElement>([
   [atkSlider, atkInput],
   [defSlider, defInput],
   [hpSlider, hpInput],
 ]);
 
+// スライダー変更を入力欄に反映。
 const handleSlider = (event: Event) => {
   const target = event.target as HTMLInputElement;
   const input = sliderToInput.get(target);
@@ -171,6 +184,7 @@ const handleSlider = (event: Event) => {
   updateOutput();
 };
 
+// イベント設定と初期表示の更新。
 inputs.forEach((input) => {
   input.addEventListener("input", handleInput);
 });
