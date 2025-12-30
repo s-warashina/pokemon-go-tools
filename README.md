@@ -1,5 +1,7 @@
 # Pokemon GO IV Hex Calculator
 
+[![Typecheck](https://github.com/s-warashina/pokemon-go-tools/actions/workflows/typecheck.yml/badge.svg)](https://github.com/s-warashina/pokemon-go-tools/actions/workflows/typecheck.yml)
+
 ポケモンGOの個体値(こうげき・ぼうぎょ・HP)を16進数で入力し、合計値とIV%を計算する静的Webアプリです。  
 例: `FFF` → 15 + 15 + 15 = 45 / 45 → 100%
 
