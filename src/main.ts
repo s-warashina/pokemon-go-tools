@@ -1,19 +1,42 @@
 const atkInput = document.querySelector<HTMLInputElement>("#atk");
 const defInput = document.querySelector<HTMLInputElement>("#def");
 const hpInput = document.querySelector<HTMLInputElement>("#hp");
+const atkSlider = document.querySelector<HTMLInputElement>("#atk-slider");
+const defSlider = document.querySelector<HTMLInputElement>("#def-slider");
+const hpSlider = document.querySelector<HTMLInputElement>("#hp-slider");
 const totalEl = document.querySelector<HTMLSpanElement>("#total");
 const percentEl = document.querySelector<HTMLSpanElement>("#percent");
+const percentDetailEl = document.querySelector<HTMLSpanElement>("#percent-detail");
 const formulaEl = document.querySelector<HTMLDivElement>("#formula");
 const statusEl = document.querySelector<HTMLDivElement>("#status");
 
-if (!atkInput || !defInput || !hpInput || !totalEl || !percentEl || !formulaEl || !statusEl) {
+if (
+  !atkInput ||
+  !defInput ||
+  !hpInput ||
+  !atkSlider ||
+  !defSlider ||
+  !hpSlider ||
+  !totalEl ||
+  !percentEl ||
+  !percentDetailEl ||
+  !formulaEl ||
+  !statusEl
+) {
   throw new Error("Missing required DOM elements.");
 }
 
 const inputs = [atkInput, defInput, hpInput];
+const sliders = [atkSlider, defSlider, hpSlider];
 const maxTotal = 45;
 
 const sanitizeHex = (value: string) => value.replace(/[^0-9A-F]/gi, "").toUpperCase();
+const toHex = (value: number) => value.toString(16).toUpperCase();
+const setSliderProgress = (slider: HTMLInputElement, value: number) => {
+  const clamped = Math.min(15, Math.max(0, value));
+  const percent = (clamped / 15) * 100;
+  slider.style.setProperty("--slider-progress", `${percent}%`);
+};
 
 const applyCombined = (value: string) => {
   if (!/^[0-9A-F]{3}$/.test(value)) {
@@ -45,13 +68,18 @@ const parseHex = (value: string) => {
 };
 
 const formatPercent = (value: number) => {
+  const rounded = Math.round(value);
+  return `${rounded.toFixed(0)}%`;
+};
+
+const formatPercentDetail = (value: number) => {
   const rounded = Math.round(value * 10) / 10;
-  return Number.isInteger(rounded) ? `${rounded.toFixed(0)}%` : `${rounded.toFixed(1)}%`;
+  return `(${rounded.toFixed(1)})`;
 };
 
 const updateOutput = () => {
   let hasInvalid = false;
-  const parsedValues = inputs.map((input) => {
+  const parsedValues = inputs.map((input, index) => {
     const sanitized = sanitizeHex(input.value).slice(-1);
     if (input.value !== sanitized) {
       input.value = sanitized;
@@ -62,6 +90,10 @@ const updateOutput = () => {
     if (result.invalid) {
       hasInvalid = true;
     }
+    if (result.value !== null) {
+      sliders[index].value = `${result.value}`;
+      setSliderProgress(sliders[index], result.value);
+    }
     return result.value;
   });
 
@@ -71,6 +103,7 @@ const updateOutput = () => {
   if (hasInvalid) {
     totalEl.textContent = "--";
     percentEl.textContent = "--";
+    percentDetailEl.textContent = "";
     formulaEl.textContent = `${displayParts.join(" + ")} = -- / ${maxTotal}`;
     statusEl.textContent = "不正な入力です。0〜Fを入力してください。";
     statusEl.className = "status warn";
@@ -80,6 +113,7 @@ const updateOutput = () => {
   if (!allValid) {
     totalEl.textContent = "--";
     percentEl.textContent = "--";
+    percentDetailEl.textContent = "";
     formulaEl.textContent = `${displayParts.join(" + ")} = -- / ${maxTotal}`;
     statusEl.textContent = "3つの値を入力してください。";
     statusEl.className = "status";
@@ -91,6 +125,7 @@ const updateOutput = () => {
 
   totalEl.textContent = `${total} / ${maxTotal}`;
   percentEl.textContent = formatPercent(percent);
+  percentDetailEl.textContent = formatPercentDetail(percent);
   formulaEl.textContent = `${displayParts.join(" + ")} = ${total} / ${maxTotal}`;
   statusEl.textContent = "計算完了";
   statusEl.className = "status good";
@@ -113,8 +148,36 @@ const handleInput = (event: Event) => {
   updateOutput();
 };
 
+const sliderToInput = new Map<HTMLInputElement, HTMLInputElement>([
+  [atkSlider, atkInput],
+  [defSlider, defInput],
+  [hpSlider, hpInput],
+]);
+
+const handleSlider = (event: Event) => {
+  const target = event.target as HTMLInputElement;
+  const input = sliderToInput.get(target);
+  if (!input) {
+    return;
+  }
+  const value = Number.parseInt(target.value, 10);
+  if (!Number.isFinite(value)) {
+    return;
+  }
+  const clamped = Math.min(15, Math.max(0, value));
+  input.value = toHex(clamped);
+  setSliderProgress(target, clamped);
+  updateOutput();
+};
+
 inputs.forEach((input) => {
   input.addEventListener("input", handleInput);
+});
+
+sliders.forEach((slider) => {
+  slider.addEventListener("input", handleSlider);
+  const initialValue = Number.parseInt(slider.value, 10);
+  setSliderProgress(slider, Number.isFinite(initialValue) ? initialValue : 0);
 });
 
 updateOutput();

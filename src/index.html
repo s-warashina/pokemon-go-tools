@@ -29,45 +29,81 @@
           <div class="field-grid">
             <label class="field" for="atk">
               <span>こうげき</span>
-              <input
-                id="atk"
-                name="attack"
-                type="text"
-                inputmode="text"
-                autocomplete="off"
-                spellcheck="false"
-                maxlength="3"
-                placeholder="F"
-                aria-label="こうげきの16進数"
-              />
+              <div class="field-row">
+                <input
+                  class="stat-slider"
+                  id="atk-slider"
+                  type="range"
+                  min="0"
+                  max="15"
+                  step="1"
+                  value="0"
+                  aria-label="こうげきのスライダー"
+                />
+                <input
+                  id="atk"
+                  name="attack"
+                  type="text"
+                  inputmode="text"
+                  autocomplete="off"
+                  spellcheck="false"
+                  maxlength="3"
+                  placeholder="F"
+                  aria-label="こうげきの16進数"
+                />
+              </div>
             </label>
             <label class="field" for="def">
               <span>ぼうぎょ</span>
-              <input
-                id="def"
-                name="defense"
-                type="text"
-                inputmode="text"
-                autocomplete="off"
-                spellcheck="false"
-                maxlength="3"
-                placeholder="F"
-                aria-label="ぼうぎょの16進数"
-              />
+              <div class="field-row">
+                <input
+                  class="stat-slider"
+                  id="def-slider"
+                  type="range"
+                  min="0"
+                  max="15"
+                  step="1"
+                  value="0"
+                  aria-label="ぼうぎょのスライダー"
+                />
+                <input
+                  id="def"
+                  name="defense"
+                  type="text"
+                  inputmode="text"
+                  autocomplete="off"
+                  spellcheck="false"
+                  maxlength="3"
+                  placeholder="F"
+                  aria-label="ぼうぎょの16進数"
+                />
+              </div>
             </label>
             <label class="field" for="hp">
               <span>HP</span>
-              <input
-                id="hp"
-                name="hp"
-                type="text"
-                inputmode="text"
-                autocomplete="off"
-                spellcheck="false"
-                maxlength="3"
-                placeholder="F"
-                aria-label="HPの16進数"
-              />
+              <div class="field-row">
+                <input
+                  class="stat-slider"
+                  id="hp-slider"
+                  type="range"
+                  min="0"
+                  max="15"
+                  step="1"
+                  value="0"
+                  aria-label="HPのスライダー"
+                />
+                <input
+                  id="hp"
+                  name="hp"
+                  type="text"
+                  inputmode="text"
+                  autocomplete="off"
+                  spellcheck="false"
+                  maxlength="3"
+                  placeholder="F"
+                  aria-label="HPの16進数"
+                />
+              </div>
             </label>
           </div>
           <p class="hint">ヒント: どこかの欄に「FFF」を貼り付けると3つに分割します。</p>
@@ -82,7 +118,10 @@
             </div>
             <div class="metric">
               <span class="label">個体値%</span>
-              <span class="value" id="percent">&#8212;</span>
+              <span class="value">
+                <span class="percent-main" id="percent">&#8212;</span>
+                <span class="percent-detail" id="percent-detail"></span>
+              </span>
             </div>
           </div>
           <div class="formula" id="formula">15 + 15 + 15 = 45 / 45</div>
