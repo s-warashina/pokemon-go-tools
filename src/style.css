@@ -107,7 +107,7 @@ h1 {
 /* 2カラムレイアウト。 */
 .content {
   display: grid;
-  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  grid-template-columns: minmax(0, 1fr);
   gap: 24px;
 }
 
@@ -116,7 +116,7 @@ h1 {
   background: var(--panel);
   border: 1px solid var(--stroke);
   border-radius: var(--radius);
-  padding: 24px;
+  padding: 18px;
   box-shadow: var(--shadow);
   backdrop-filter: blur(12px);
   animation: rise 0.8s ease-out both;
@@ -307,6 +307,32 @@ h1 {
 .metrics {
   display: grid;
   gap: 16px;
+}
+
+.metrics.summary {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr);
+  gap: 12px;
+  align-items: center;
+}
+
+.metrics.summary .metric {
+  gap: 4px;
+}
+
+.metrics.summary .metric .label {
+  font-size: 11px;
+  letter-spacing: 0.14em;
+}
+
+.metrics.summary .metric .value {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.metrics.summary .percent-detail {
+  margin-left: 6px;
+  font-size: 12px;
 }
 
 .metric {

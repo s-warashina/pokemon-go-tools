@@ -3,13 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Pokemon GO 個体値 16進数計算</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap"
-      rel="stylesheet"
-    />
+    <title>PokemonGOツール</title>
     <link rel="stylesheet" href="./style.css" />
   </head>
   <body>
@@ -25,7 +19,7 @@
 
       <main class="content">
         <section class="panel inputs" aria-labelledby="inputs-title">
-          <div class="panel-title" id="inputs-title">16進数入力</div>
+          <div class="panel-title" id="inputs-title">個体値入力</div>
           <div class="field-grid">
             <label class="field" for="atk">
               <span>こうげき</span>
@@ -109,27 +103,23 @@
               </div>
             </label>
           </div>
-          <p class="hint">ヒント: どこかの欄に「FFF」を貼り付けると3つに分割します。</p>
-        </section>
-
-        <section class="panel results" aria-live="polite">
-          <div class="panel-title">結果</div>
-          <div class="metrics">
-            <div class="metric">
-              <span class="label">合計</span>
-              <span class="value" id="total">&#8212;</span>
-            </div>
+          <div class="metrics summary">
             <div class="metric">
               <span class="label">個体値%</span>
               <span class="value">
-                <span class="percent-main" id="percent">&#8212;</span>
-                <span class="percent-detail" id="percent-detail"></span>
+                <span class="percent-main" data-output="percent">&#8212;</span>
+                <span class="percent-detail" data-output="percent-detail"></span>
               </span>
+            </div>
+            <div class="metric">
+              <span class="label">合計値</span>
+              <span class="value" data-output="total">&#8212;</span>
             </div>
           </div>
           <div class="formula" id="formula">15 + 15 + 15 = 45 / 45</div>
           <div class="status" id="status">3つの値を入力してください。</div>
         </section>
+          <p class="hint">ヒント: どこかの欄に「FFF」を貼り付けると3つに分割します。</p>
       </main>
     </div>
 
