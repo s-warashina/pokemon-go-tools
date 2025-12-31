@@ -270,7 +270,7 @@ h1 {
 }
 
 /* 16進入力欄の見た目。 */
-.field input {
+.stat-input {
   width: 100%;
   height: 64px;
   font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
@@ -279,19 +279,19 @@ h1 {
   letter-spacing: 0.12em;
   text-align: center;
   border-radius: 16px;
-  border: 2px solid transparent;
+  border: 2px solid var(--stroke);
   background: #fff;
   color: var(--ink);
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.field input:focus {
+.stat-input:focus {
   outline: none;
   border-color: var(--accent);
   box-shadow: 0 0 0 4px rgba(255, 122, 89, 0.2);
 }
 
-.field input.invalid {
+.stat-input.invalid {
   border-color: #e63946;
   box-shadow: 0 0 0 4px rgba(230, 57, 70, 0.15);
 }
@@ -393,13 +393,18 @@ h1 {
     grid-template-columns: 1fr minmax(76px, 104px);
   }
 
-  .field input {
+  .stat-input {
     height: 56px;
     font-size: 24px;
   }
 }
 
 @media (max-width: 600px) {
+  .field-row {
+    grid-template-columns: 1fr minmax(48px, 64px);
+    gap: 10px;
+  }
+
   .stat-slider {
     height: 10px;
   }
