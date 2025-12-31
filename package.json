@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "build": "bun run scripts/build.ts",
-    "preview": "bun --serve ./dist/index.html",
+    "dev": "bun run scripts/dev.ts",
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
