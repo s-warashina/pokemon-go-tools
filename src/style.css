@@ -398,3 +398,32 @@ h1 {
     font-size: 24px;
   }
 }
+
+@media (max-width: 600px) {
+  .stat-slider {
+    height: 10px;
+  }
+
+  .stat-slider::-webkit-slider-runnable-track {
+    height: 10px;
+  }
+
+  .stat-slider::-webkit-slider-thumb {
+    width: 26px;
+    height: 26px;
+    margin-top: -8px;
+  }
+
+  .stat-slider::-moz-range-track {
+    height: 10px;
+  }
+
+  .stat-slider::-moz-range-progress {
+    height: 10px;
+  }
+
+  .stat-slider::-moz-range-thumb {
+    width: 26px;
+    height: 26px;
+  }
+}
