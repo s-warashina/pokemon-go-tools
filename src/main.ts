@@ -5,9 +5,9 @@ const hpInput = document.querySelector<HTMLInputElement>("#hp");
 const atkSlider = document.querySelector<HTMLInputElement>("#atk-slider");
 const defSlider = document.querySelector<HTMLInputElement>("#def-slider");
 const hpSlider = document.querySelector<HTMLInputElement>("#hp-slider");
-const totalEl = document.querySelector<HTMLSpanElement>("#total");
-const percentEl = document.querySelector<HTMLSpanElement>("#percent");
-const percentDetailEl = document.querySelector<HTMLSpanElement>("#percent-detail");
+const totalEls = document.querySelectorAll<HTMLSpanElement>("[data-output='total']");
+const percentEls = document.querySelectorAll<HTMLSpanElement>("[data-output='percent']");
+const percentDetailEls = document.querySelectorAll<HTMLSpanElement>("[data-output='percent-detail']");
 const formulaEl = document.querySelector<HTMLDivElement>("#formula");
 const statusEl = document.querySelector<HTMLDivElement>("#status");
 
@@ -19,9 +19,9 @@ if (
   !atkSlider ||
   !defSlider ||
   !hpSlider ||
-  !totalEl ||
-  !percentEl ||
-  !percentDetailEl ||
+  totalEls.length === 0 ||
+  percentEls.length === 0 ||
+  percentDetailEls.length === 0 ||
   !formulaEl ||
   !statusEl
 ) {
@@ -85,6 +85,12 @@ const formatPercentDetail = (value: number) => {
   return `(${rounded.toFixed(1)})`;
 };
 
+const setTextAll = <T extends HTMLElement>(elements: NodeListOf<T>, text: string) => {
+  elements.forEach((element) => {
+    element.textContent = text;
+  });
+};
+
 // 入力値・バリデーション状態・スライダーを同期。
 const normalizeInput = (input: HTMLInputElement, slider: HTMLInputElement) => {
   const sanitized = sanitizeHex(input.value);
@@ -107,9 +113,9 @@ const normalizeInput = (input: HTMLInputElement, slider: HTMLInputElement) => {
 
 // 未入力/不正入力時の出力表示をリセット。
 const resetOutput = (displayParts: string[], message: string, statusClass: string) => {
-  totalEl.textContent = "--";
-  percentEl.textContent = "--";
-  percentDetailEl.textContent = "";
+  setTextAll(totalEls, "--");
+  setTextAll(percentEls, "--");
+  setTextAll(percentDetailEls, "");
   formulaEl.textContent = `${displayParts.join(" + ")} = -- / ${maxTotal}`;
   statusEl.textContent = message;
   statusEl.className = statusClass;
@@ -135,9 +141,9 @@ const updateOutput = () => {
   const total = parsed.reduce((sum, result) => sum + (result.value ?? 0), 0);
   const percent = (total / maxTotal) * 100;
 
-  totalEl.textContent = `${total} / ${maxTotal}`;
-  percentEl.textContent = formatPercent(percent);
-  percentDetailEl.textContent = formatPercentDetail(percent);
+  setTextAll(totalEls, `${total} / ${maxTotal}`);
+  setTextAll(percentEls, formatPercent(percent));
+  setTextAll(percentDetailEls, formatPercentDetail(percent));
   formulaEl.textContent = `${displayParts.join(" + ")} = ${total} / ${maxTotal}`;
   statusEl.textContent = "計算完了";
   statusEl.className = "status good";
