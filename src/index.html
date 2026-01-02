@@ -119,7 +119,37 @@
           <div class="formula" id="formula">15 + 15 + 15 = 45 / 45</div>
           <div class="status" id="status">3つの値を入力してください。</div>
         </section>
-          <p class="hint">ヒント: どこかの欄に「FFF」を貼り付けると3つに分割します。</p>
+        <p class="hint">ヒント: どこかの欄に「FFF」を貼り付けると3つに分割します。</p>
+
+        <section class="panel type-search" aria-labelledby="type-search-title">
+          <div class="panel-title" id="type-search-title">タイプ相性検索</div>
+          <div class="type-search-grid">
+            <label class="field" for="type-select">
+              <span>こうげきタイプ</span>
+              <select
+                class="type-select"
+                id="type-select"
+                name="type"
+                aria-label="こうげきタイプの選択"
+              ></select>
+            </label>
+            <div class="type-results">
+              <div class="type-card" data-effect="double">
+                <div class="type-card-title">効果ばつぐん (2x)</div>
+                <ul class="type-list" data-output="type-double"></ul>
+              </div>
+              <div class="type-card" data-effect="half">
+                <div class="type-card-title">いまひとつ (0.5x)</div>
+                <ul class="type-list" data-output="type-half"></ul>
+              </div>
+              <div class="type-card" data-effect="none">
+                <div class="type-card-title">無効 (0x)</div>
+                <ul class="type-list" data-output="type-none"></ul>
+              </div>
+            </div>
+          </div>
+          <div class="status" id="type-status">タイプを選択してください。</div>
+        </section>
       </main>
     </div>
 

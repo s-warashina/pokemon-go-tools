@@ -1,3 +1,5 @@
+import { typeChart, typeOrder } from "./type-chart";
+
 // 入力・スライダー・出力のDOM参照を取得。
 const atkInput = document.querySelector<HTMLInputElement>("#atk");
 const defInput = document.querySelector<HTMLInputElement>("#def");
@@ -10,6 +12,11 @@ const percentEls = document.querySelectorAll<HTMLSpanElement>("[data-output='per
 const percentDetailEls = document.querySelectorAll<HTMLSpanElement>("[data-output='percent-detail']");
 const formulaEl = document.querySelector<HTMLDivElement>("#formula");
 const statusEl = document.querySelector<HTMLDivElement>("#status");
+const typeSelect = document.querySelector<HTMLSelectElement>("#type-select");
+const typeDoubleList = document.querySelector<HTMLUListElement>("[data-output='type-double']");
+const typeHalfList = document.querySelector<HTMLUListElement>("[data-output='type-half']");
+const typeNoneList = document.querySelector<HTMLUListElement>("[data-output='type-none']");
+const typeStatusEl = document.querySelector<HTMLDivElement>("#type-status");
 
 // 必要な要素が欠けていたら即座にエラー。
 if (
@@ -23,7 +30,12 @@ if (
   percentEls.length === 0 ||
   percentDetailEls.length === 0 ||
   !formulaEl ||
-  !statusEl
+  !statusEl ||
+  !typeSelect ||
+  !typeDoubleList ||
+  !typeHalfList ||
+  !typeNoneList ||
+  !typeStatusEl
 ) {
   throw new Error("Missing required DOM elements.");
 }
@@ -32,6 +44,30 @@ const inputs = [atkInput, defInput, hpInput];
 const sliders = [atkSlider, defSlider, hpSlider];
 const maxStat = 15;
 const maxTotal = maxStat * 3;
+type TypeName = (typeof typeOrder)[number];
+
+const typeNameJaByEn = {
+  normal: "ノーマル",
+  fire: "ほのお",
+  water: "みず",
+  electric: "でんき",
+  grass: "くさ",
+  ice: "こおり",
+  fighting: "かくとう",
+  poison: "どく",
+  ground: "じめん",
+  flying: "ひこう",
+  psychic: "エスパー",
+  bug: "むし",
+  rock: "いわ",
+  ghost: "ゴースト",
+  dragon: "ドラゴン",
+  dark: "あく",
+  steel: "はがね",
+  fairy: "フェアリー",
+} as const satisfies Record<TypeName, string>;
+
+const formatTypeName = (name: TypeName) => typeNameJaByEn[name] ?? name;
 
 // 検証用の正規表現。
 const hexCharRe = /^[0-9A-F]$/;
@@ -89,6 +125,74 @@ const setTextAll = <T extends HTMLElement>(elements: NodeListOf<T>, text: string
   elements.forEach((element) => {
     element.textContent = text;
   });
+};
+
+const renderTypeList = (element: HTMLUListElement, types: TypeName[]) => {
+  element.textContent = "";
+  if (types.length === 0) {
+    const item = document.createElement("li");
+    item.className = "type-empty";
+    item.textContent = "なし";
+    element.append(item);
+    return;
+  }
+  for (const type of types) {
+    const item = document.createElement("li");
+    item.className = "type-chip";
+    item.textContent = formatTypeName(type);
+    element.append(item);
+  }
+};
+
+const initTypeSelect = () => {
+  const placeholder = document.createElement("option");
+  placeholder.value = "";
+  placeholder.textContent = "タイプを選択";
+  placeholder.disabled = true;
+  placeholder.selected = true;
+  typeSelect.append(placeholder);
+
+  for (const type of typeOrder) {
+    const option = document.createElement("option");
+    option.value = type;
+    option.textContent = formatTypeName(type);
+    typeSelect.append(option);
+  }
+};
+
+const updateTypeMatchup = () => {
+  const selected = typeSelect.value as TypeName | "";
+  if (!selected || !(selected in typeChart)) {
+    renderTypeList(typeDoubleList, []);
+    renderTypeList(typeHalfList, []);
+    renderTypeList(typeNoneList, []);
+    typeStatusEl.textContent = "タイプを選択してください。";
+    typeStatusEl.className = "status";
+    return;
+  }
+
+  const selectedType = selected as TypeName;
+  const relations = typeChart[selectedType];
+  const doubleTypes: TypeName[] = [];
+  const halfTypes: TypeName[] = [];
+  const noneTypes: TypeName[] = [];
+
+  for (const defense of typeOrder) {
+    const effectiveness = relations[defense];
+    if (effectiveness === 2) {
+      doubleTypes.push(defense);
+    } else if (effectiveness === 0.5) {
+      halfTypes.push(defense);
+    } else if (effectiveness === 0) {
+      noneTypes.push(defense);
+    }
+  }
+
+  renderTypeList(typeDoubleList, doubleTypes);
+  renderTypeList(typeHalfList, halfTypes);
+  renderTypeList(typeNoneList, noneTypes);
+  typeStatusEl.textContent = `${formatTypeName(selectedType)}の攻撃相性を表示しています。`;
+  typeStatusEl.className = "status good";
 };
 
 // 入力値・バリデーション状態・スライダーを同期。
@@ -202,3 +306,7 @@ sliders.forEach((slider) => {
 });
 
 updateOutput();
+
+initTypeSelect();
+typeSelect.addEventListener("change", updateTypeMatchup);
+updateTypeMatchup();
